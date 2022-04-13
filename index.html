@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Tic Tac Toe Game</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+
+    <h1>Tic Tac Toe</h1>
+    <h2 id="player-scores">Scores: X=0 O=0</h2>
+    <h2>Its your turn, <span class="display_player"></span>.</h2>
+    <h2 id="number_of_moves"></h2>
+    <h2 id="winner"></h2>
+    
+    <div class="game_board">
+      <div class="row">
+        <div class="one" id="element_one"><span class="xo"></span></div>
+        <div class="two" id="element_two"><span class="xo"></span></div>
+        <div class="three" id="element_three"><span class="xo"></span></div>
+      </div>
+      <div class="row">
+        <div class="four" id="element_four"><span class="xo"></span></div>
+        <div class="five" id="element_five"><span class="xo"></span></div>
+        <div class="six" id="element_six"><span class="xo"></span></div>
+      </div>
+      <div class="row">
+        <div class="seven" id="element_seven"><span class="xo"></span></div>
+        <div class="eight" id="element_eight"><span class="xo"></span></div>
+        <div class="nine" id="element_nine"><span class="xo"></span></div>
+      </div>
+    </div>
+
+    <button class="new_game" onclick="newGame()">New Game</button>
+    <button class="reset" onclick="resetGame()">Reset</button>
+    <button class="play_against" onclick="ticTacToeGameMultiplayer()">Select 2 Players</button>
+    <button class="play_against" onclick="ticTacToeGameAI()">Play Against AI</button>
+  </body>
+</html>
