@@ -2,6 +2,10 @@ var playerTurn = 'X';
 var numMoves = 0;
 var playerScoreX = 0;
 var playerScoreO = 0;
+var existsWinner = 0;
+var timer;
+var multiplayerFlag = 0;
+var aiFlag = 0;
 var ticTacToeArr = [0, 0, 0, 
                     0, 0, 0, 
                     0, 0, 0];
@@ -40,6 +44,11 @@ document.getElementsByClassName('display_player')[0].innerHTML = 'X';
 
 /* Adds shapes to the squares the user picked */
 function addShapeToBoard(squarePressed, squareNum) {
+    if(multiplayerFlag == 1) {
+        stopTimer(); //stop original timer and start a new one
+        startTimer();
+    }
+    
     if(playerTurn == 'X') {
         squarePressed.children[0].className = "cross";
         ticTacToeArr[squareNum] = 1; // 1 represents X
@@ -57,6 +66,12 @@ function addShapeToBoard(squarePressed, squareNum) {
     
     checkIfBoardFull();
     changeTurn();
+
+    if(aiFlag == 1) {
+        ticTacToeGameAI();
+    }
+
+    document.getElementById('player-took-long').textContent = '';
 }
 
 /* Check the winning squares array if the board */
@@ -74,6 +89,9 @@ function checkIfWon() {
             document.getElementById('winner').textContent = 'Player X is the winner!!!';
             playerScoreX += 1;
             document.getElementById('player-scores').textContent = `Scores: X= ${playerScoreX} O=${playerScoreO}`;
+            existsWinner = 1;
+            aiFlag = 0;
+            stopTimer();
             break;
         }
 
@@ -81,6 +99,9 @@ function checkIfWon() {
             document.getElementById('winner').textContent = 'Player O is the winner!!!';
             playerScoreO += 1;
             document.getElementById('player-scores').textContent = `Scores: X=${playerScoreX} O=${playerScoreO}`;
+            existsWinner = 1;
+            aiFlag = 0;
+            stopTimer();
             break;
         }
     }
@@ -89,7 +110,13 @@ function checkIfWon() {
  /* Checks number of moves left and if the board is full */
 function checkIfBoardFull() {
     if(numMoves == 9) {
-        document.getElementById('number_of_moves').innerHTML = "NO MORE MOVES CAN BE MADE! THE BOARD IS FULL!";
+        document.getElementById('number_of_moves').innerHTML = "NO MORE MOVES CAN BE MADE! THE BOARD IS FULL! ";
+
+        if(existsWinner == 0) {
+            document.getElementById('number_of_moves').innerHTML += "ALSO THERE IS A TIE!";
+        }
+
+        stopTimer();
     }
 }
 
@@ -107,24 +134,30 @@ function changeTurn() {
 
 /* Starts a new game and keeps scores */
 function newGame() {
+    existsWinner = 0;
     numMoves = 0;
+    aiFlag = 0;
     playerTurn = 'X';
     document.getElementsByClassName('display_player')[0].innerHTML = 'X';
     document.getElementById('number_of_moves').innerHTML = "";
     document.getElementById('winner').textContent = '';
+    stopTimer(); 
     clearBoard();
 }
 
 /* Reset the game and reset scores */
 function resetGame() {
+    existsWinner = 0;
     numMoves = 0;
     playerScoreX = 0;
     playerScoreO = 0;
+    aiFlag = 0;
     playerTurn = 'X';
     document.getElementsByClassName('display_player')[0].innerHTML = 'X';
     document.getElementById('player-scores').textContent = `Scores: X=${playerScoreX} O=${playerScoreO}`;
     document.getElementById('number_of_moves').innerHTML = "";
     document.getElementById('winner').textContent = '';
+    stopTimer(); 
     clearBoard();
 }
 
@@ -145,17 +178,67 @@ function clearBoard(){
     square9.children[0].className = "xo";
 }
 
-/* Starts a timer for users to make a move */
-function ticTacToeGameMultiplayer() {
-
-    setInterval(playerTimer, 1000); // A t
+/* Starts a timer for users to make a move Every 3 seconds if person takes too long player loses turn */
+function startTimer() {
+    multiplayerFlag = 1;
+    timer = setTimeout(startTimerHelper, 3000); 
 }
 
-function playerTimer() {
-
+function startTimerHelper() {
+    changeTurn();
+    document.getElementById('player-took-long').textContent = `Previous player took too long and lost their turn. Now it is ${playerTurn} turn`;
 }
 
-/*  */
+function stopTimer() {
+    clearTimeout(timer);
+}
+
+function checkSquareEmpty(squareNum) {
+    if(ticTacToeArr[squareNum] != 0) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+/* Play against a random AI */
 function ticTacToeGameAI() {
+    aiFlag = 1;
 
+    if(playerTurn == 'X') {
+        let randomSquare = Math.floor(Math.random() * 9);// gets a random number every time at x
+
+        while(checkSquareEmpty(randomSquare) == false) { // Keeps checking until it finds a random 
+            randomSquare = Math.floor(Math.random() * 9);
+        }
+
+        if(randomSquare == 0) {
+            addShapeToBoard(square1, 0);
+        }
+        if(randomSquare == 1) {
+            addShapeToBoard(square2, 1);
+        }
+        if(randomSquare == 2) {
+            addShapeToBoard(square3, 2);
+        }
+        if(randomSquare == 3) {
+            addShapeToBoard(square4, 3);
+        }
+        if(randomSquare == 4) {
+            addShapeToBoard(square5, 4);
+        }
+        if(randomSquare == 5) {
+            addShapeToBoard(square6, 5);
+        }
+        if(randomSquare == 6) {
+            addShapeToBoard(square7, 6);
+        }
+        if(randomSquare == 7) {
+            addShapeToBoard(square8, 7);
+        }
+        if(randomSquare == 8) {
+            addShapeToBoard(square9, 8);
+        }
+    }
 }
